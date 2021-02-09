@@ -20,23 +20,16 @@ app.get('/', (req, res) => {
 })
 
 app.post('/upload', (req, res) => {
-    const file = req.files.file;
-    const fileName = req.body.fileName;
-    const filePath = 'files/'+fileName;
+    
+    console.log(req.body);
+    
+    const fileName = req.body.data;
+    
+    const fileHash = await addFile(fileName, filePath);
+    console.log(fileHash);
+    console.log(`https://ipfs.io/ipfs/${fileHash}/`);
 
-    file.mv(filePath, async(err) => {
-        if(err) {
-            console.log(err)
-            return res.status(500).send(err)
-        }
-        const fileHash = await addFile(fileName, filePath);
-        console.log(fileHash);
-        console.log(`https://ipfs.io/ipfs/${fileHash}/`);
-        fs.unlink(filePath, (err) => {
-            if(err) console.log(err)
-        });
-        return true;
-    })
+    res.send(fileHash);
 })
 
 app.get('/get_cid/:cid', async (req, res) => {
@@ -78,9 +71,8 @@ app.get('/cat/:cid', async(req, res)=>{
     });
 })
 
-const addFile = async (fileName, filePath) => {
-    const file = fs.readFileSync(filePath);
-    const fileAdded = await ipfs.add({path: fileName, content: file})
+const addFile = async (fileContent) => {
+    const fileAdded = await ipfs.add(fileContent)
     console.log(fileAdded);
     //return fileAdded[0].hash; 
     return fileAdded.cid.toString(); 

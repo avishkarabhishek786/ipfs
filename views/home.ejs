@@ -9,15 +9,12 @@
     
     <h1>Upload files to IPFS</h1>
 
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <label>File Name</label>
-        <input type="text" name="fileName">
-        <br>
-        <label>Upload File</label>
-        <input type="file" name="file">
-        <br>
-        <input type="submit" value="Upload">
-    </form>
+    <p>
+        Send file content in String, Blob or ReadableStream<Uint8Array> format to 
+        localhost:3000/upload as POST request.    
+    </p>
+
+    <p>You can see the content at http://ipfs.io/ipfs/YOUR-FILE-HASH</p>
 
 </body>
 </html>
